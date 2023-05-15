@@ -1,14 +1,14 @@
 const Octokit = require("@octokit/rest");
 
 const octokit = new Octokit({
-  auth: "YOUR_PERSONAL_ACCESS_TOKEN",
+  auth: "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",
 });
 
 async function addFileToRepo(content, filePath) {
   try {
     const response = await octokit.repos.createOrUpdateFileContents({
-      owner: "YOUR_GITHUB_USERNAME",
-      repo: "YOUR_REPO_NAME",
+      owner: "SkusELEL",
+      repo: "ToDoListRobloxGameWroom",
       path: filePath,
       message: "Dodanie pliku z rzeczami",
       content: Buffer.from(content).toString("base64"),
