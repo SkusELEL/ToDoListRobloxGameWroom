@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Lista zadań</title>
+  <style>
+    /* wyśrodkowanie */
+    body {
+      background-image: url("index.png");
+      background-color: #cccccc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* reszta stylów */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #36393F;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #72767D;
+      width: 50%;
+      text-align: center;
+    }
+
+    .close {
+      color: #DCDDDE;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #FFF;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      /* zmniejszenie odstępu */
+      background-color: #40444B;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: #72767D;
+    }
+
+    button {
+      color: #FFF;
+      background-color: #7289DA;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover,
+    button:focus {
+      background-color: #677BC4;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #DCDDDE;
+      background-color: #40444B;
+      width: 100%;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    span {
+      color: #DCDDDE;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 style="color: #FFF;">Moja lista zadań</h1>
+  <ul id="task-list"></ul>
+  <button onclick="openModal()"
+    style="color: #FFF; background-color: #7289DA; border: none; border-radius: 5px; padding: 10px; font-size: 16px; cursor: pointer; transition: background-color 0.2s;">Dodaj
+    rzecz</button>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 style="color: #FFF;">Dodaj nową rzecz do listy</h2>
+      <input type="text" id="task-name" placeholder="Nazwa zadania">
+      <button onclick="addTask()">Dodaj</button>
+    </div>
+  </div>
+  <script>
+    let tasks = [];
+
+    const taskList = document.getElementById("task-list");
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const taskElement = document.createElement("li");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.completed;
+        checkbox.addEventListener("click", () => toggleCompleted(index));
+        const nameElement = document.createElement("span");
+        nameElement.innerText = task.name;
+        nameElement.className = task.completed ? "completed" : "";
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = "Usuń";
+        deleteButton.addEventListener("click", () => deleteTask(index));
+        taskElement.appendChild(checkbox);
+        taskElement.appendChild(nameElement);
+        taskElement.appendChild(deleteButton);
+        taskList.appendChild(taskElement);
+      });
+    }
+
+    function openModal() {
+      const modal = document.getElementById("myModal");
+      modal.style.display = "block";
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("myModal");
+      modal.style.display = "none";
+    }
+
+    function addTask() {
+      const taskName = document.getElementById("task-name").value;
+      if (taskName.trim() !== "") {
+        tasks.push({
+          name: taskName,
+          completed: false
+        });
+        renderTasks();
+        closeModal();
+      }
+    }
+
+    function toggleCompleted(index) {
+      tasks[index].completed = !tasks[index].completed;
+      renderTasks();
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+
+  </script>
+</body>
+
+</html>
